@@ -1,4 +1,33 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
+<style>
+  /* Optional: completely hide iframe to block ads */
+  /* #modal-video {
+    display: none !important;
+  } */
+
+  /* Optional: Blur iframe to obscure ads (you can adjust this) */
+  #modal-video[src*="vidsrc"],
+  #modal-video[src*="videasy"],
+  #modal-video[src*="vidsrc.me"] {
+    filter: blur(5px);
+    pointer-events: none; /* disables clicking */
+  }
+
+  /* Optional: Add a custom message overlay if you want */
+  .video-warning {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: red;
+    font-weight: bold;
+    font-size: 1.2em;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 1em;
+    z-index: 9999;
+  }
+</style>
+
     body { font-family: Arial, sans-serif; background: #111; color: #fff; }
 
     .navbar {
@@ -283,4 +312,5 @@
     flex-direction: row;
     gap: 8px;
   }
+
 }
