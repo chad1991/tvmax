@@ -20,25 +20,31 @@ async function openModalWithMovie(movie) {
   // Get trailer from TMDB
   const trailerUrl = await getTrailerUrl(movie.id, movie.media_type || "movie");
   const trailerIframe = document.getElementById("modal-trailer");
+  const videoPlayer = document.getElementById("modal-video");
+  const videoSource = document.getElementById("video-source");
+
   if (trailerUrl) {
     trailerIframe.src = trailerUrl;
     trailerIframe.style.display = "block";
   } else {
     trailerIframe.style.display = "none";
+    trailerIframe.src = "";
   }
 
   // Set your own full movie URL here if you have one
-  const fullMovieUrl = ""; // Example: "https://yourdomain.com/videos/movie.mp4"
-
-  const videoPlayer = document.getElementById("modal-video");
-  const videoSource = document.getElementById("video-source");
+  // Example usage: replace empty string with actual URL to MP4 file
+  const fullMovieUrl = ""; // e.g. "https://yourdomain.com/videos/movie.mp4"
 
   if (fullMovieUrl) {
     videoSource.src = fullMovieUrl;
     videoPlayer.load();
     videoPlayer.style.display = "block";
+    trailerIframe.style.display = "none"; // hide trailer if playing full movie
+    videoPlayer.play().catch(() => {}); // try to autoplay, catch any promise rejection
   } else {
+    videoPlayer.pause();
     videoPlayer.style.display = "none";
+    videoSource.src = "";
   }
 
   document.getElementById("modal").style.display = "block";
@@ -68,5 +74,8 @@ function closeModal() {
   // Stop video
   const videoPlayer = document.getElementById("modal-video");
   videoPlayer.pause();
-  videoPlayer.src = "";
+  videoPlayer.currentTime = 0;
+  const videoSource = document.getElementById("video-source");
+  videoSource.src = "";
+  videoPlayer.style.display = "none";
 }
