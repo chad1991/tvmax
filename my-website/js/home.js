@@ -122,3 +122,26 @@ const API_KEY = '81c7ba2069845d43afd41a1689a5dceb';
 
 
     init();
+document.addEventListener("DOMContentLoaded", () => {
+  const iframe = document.getElementById("modal-video");
+
+  const observer = new MutationObserver(() => {
+    const blockedSources = ["vidsrc.cc", "vidsrc.me", "videasy.net"];
+    if (iframe && iframe.src) {
+      const isBlocked = blockedSources.some(domain => iframe.src.includes(domain));
+      if (isBlocked) {
+        console.warn("Blocked ad iframe:", iframe.src);
+        iframe.removeAttribute("src"); // Stop it from loading
+        // Optionally show your own message
+        const warning = document.createElement("div");
+        warning.className = "video-warning";
+        warning.innerText = "Video source blocked due to ads.";
+        iframe.parentElement.appendChild(warning);
+      }
+    }
+  });
+
+  observer.observe(iframe, { attributes: true, attributeFilter: ['src'] });
+});
+
+
