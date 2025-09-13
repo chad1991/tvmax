@@ -41,39 +41,35 @@
   </div>
 
   <div class="modal" id="modal" style="display:none;">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()" style="color: red; cursor: pointer;">&times;</span>
-    <div class="modal-body">
-      <img id="modal-image" src="" alt="" />
-      <div class="modal-text">
-        <h2 id="modal-title"></h2>
-        <div class="stars" id="modal-rating"></div>
-        <p id="modal-description"></p>
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()" style="color: red; cursor: pointer;">&times;</span>
+      <div class="modal-body">
+        <img id="modal-image" src="" alt="" />
+        <div class="modal-text">
+          <h2 id="modal-title"></h2>
+          <div class="stars" id="modal-rating"></div>
+          <p id="modal-description"></p>
+        </div>
       </div>
+
+      <!-- Trailer iframe -->
+      <iframe id="modal-trailer" width="100%" height="315" frameborder="0" allowfullscreen></iframe>
+
+      <!-- Full movie player placeholder -->
+      <video id="modal-video" width="100%" height="auto" controls style="margin-top: 1em; display: none;">
+        <source id="video-source" src="" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
     </div>
-
-    <!-- Trailer iframe -->
-    <iframe id="modal-trailer" width="100%" height="315" frameborder="0" allowfullscreen></iframe>
-
-    <!-- Full movie player placeholder -->
-    <video id="modal-video" width="100%" height="auto" controls style="margin-top: 1em; display: none;">
-      <source id="video-source" src="" type="video/mp4" />
-      Your browser does not support the video tag.
-    </video>
   </div>
-</div>
 
-      
-      <div class="server-selector">
-        <label for="server">Change Server:</label>
-        <select id="server" onchange="changeServer()">
-          <option value="vidsrc.cc">Vidsrc.cc</option>
-          <option value="vidsrc.me">Vidsrc.me</option>
-          <option value="player.videasy.net">Player.Videasy.net</option>
-        </select>
-      </div>
-      <iframe id="modal-video" width="100%" height="315" frameborder="0" allowfullscreen></iframe>
-    </div>
+  <div class="server-selector" style="display:none;">
+    <label for="server">Change Server:</label>
+    <select id="server" onchange="changeServer()">
+      <option value="vidsrc.cc">Vidsrc.cc</option>
+      <option value="vidsrc.me">Vidsrc.me</option>
+      <option value="player.videasy.net">Player.Videasy.net</option>
+    </select>
   </div>
 
   <div class="search-modal" id="search-modal">
@@ -82,22 +78,15 @@
     <div class="results" id="search-results"></div>
   </div>
 
-<footer class="footer">
-  <div class="footer-content">
-    <p>&copy; 2025 My Website. All rights reserved.</p>
-    <div class="footer-links">
-      <a href="#">Disclaimer</a>
-      <a href="#">About Us</a>
-      <a href="#">Contact Us</a>
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2025 My Website. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="#">Disclaimer</a>
+        <a href="#">About Us</a>
+        <a href="#">Contact Us</a>
+      </div>
     </div>
-  </div>
-</footer>
-
-  
-
+  </footer>
 </body>
-
-
-
-
-
+</html>
