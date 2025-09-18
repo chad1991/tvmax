@@ -59,11 +59,11 @@ const API_KEY = '81c7ba2069845d43afd41a1689a5dceb';
       let embedURL = "";
 
       if (server === "vidsrc.cc") {
-        embedURL = `https://vidsrc.cc/v2/embed/${type}/${currentItem.id}`;
+        embedURL = `https://videojs-player-omega.vercel.app/}`;
       } else if (server === "vidsrc.me") {
-        embedURL = `https://vidsrc.net/embed/${type}/?tmdb=${currentItem.id}`;
+        embedURL = `https://videojs-player-omega.vercel.app/}`;
       } else if (server === "player.videasy.net") {
-        embedURL = `https://player.videasy.net/${type}/${currentItem.id}`;
+        embedURL = `https://videojs-player-omega.vercel.app/}`;
       }
 
       document.getElementById('modal-video').src = embedURL;
@@ -122,3 +122,4 @@ const API_KEY = '81c7ba2069845d43afd41a1689a5dceb';
 
 
     init();
+
