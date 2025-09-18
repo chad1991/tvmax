@@ -59,11 +59,11 @@ const API_KEY = '81c7ba2069845d43afd41a1689a5dceb';
       let embedURL = "";
 
       if (server === "vidsrc.cc") {
-        embedURL = `https://videojs-player-omega.vercel.app/}`;
+        embedURL = `https://vid-src-embeds-no-ads-demo.vercel.app/embed?url=https://vidsrc.in/embed/tt0944947/2-3/}`;
       } else if (server === "vidsrc.me") {
-        embedURL = `https://videojs-player-omega.vercel.app/}`;
+        embedURL = `https://vid-src-embeds-no-ads-demo.vercel.app/embed?url=https://vidsrc.in/embed/tt0944947/2-3/}`;
       } else if (server === "player.videasy.net") {
-        embedURL = `https://videojs-player-omega.vercel.app/}`;
+        embedURL = `https://vid-src-embeds-no-ads-demo.vercel.app/embed?url=https://vidsrc.in/embed/tt0944947/2-3/}`;
       }
 
       document.getElementById('modal-video').src = embedURL;
@@ -122,4 +122,5 @@ const API_KEY = '81c7ba2069845d43afd41a1689a5dceb';
 
 
     init();
+
 
