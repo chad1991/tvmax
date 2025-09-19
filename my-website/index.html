@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -9,6 +8,45 @@
   <link rel="preload" href="js/home.js" as="script">
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script defer src="js/home.js"></script>
+  <style>
+    /* Dropdown styles */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .dropdown-toggle {
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      color: white;
+      padding: 8px 12px;
+    }
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #222;
+      min-width: 150px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      border-radius: 6px;
+      z-index: 1000;
+    }
+    .dropdown-menu a {
+      display: block;
+      padding: 10px;
+      color: white;
+      text-decoration: none;
+    }
+    .dropdown-menu a:hover {
+      background: #444;
+    }
+    .dropdown:hover .dropdown-menu {
+      display: block;
+    }
+  </style>
 </head>
 
 <body>
@@ -16,6 +54,17 @@
     <img src="logo.png" alt="logo" />
     <div class="nav-links">
       <a href="index.html">Home</a>
+
+      <!-- Dropdown Menu -->
+      <div class="dropdown">
+        <button class="dropdown-toggle">Browse <i class="fa fa-caret-down"></i></button>
+        <div class="dropdown-menu">
+          <a href="#movies-list">Movies</a>
+          <a href="#tvshows-list">TV Shows</a>
+          <a href="#anime-list">Anime</a>
+        </div>
+      </div>
+
       <input type="text" class="search-bar" placeholder="Search..." onfocus="openSearchModal()" />
     </div>
   </div>
@@ -54,35 +103,9 @@
       <div class="server-selector">
         <label for="server">Change Server:</label>
         <select id="server" onchange="changeServer()">
-          <option value="vidsrc.domains">vidsrc.domains</option>
-          <option value="vidsrc.to">vidsrc.to</option>
-          <option value="vidsrc.cc">vidsrc.cc</option>
-          <option value="vidsrc.vip">vidsrc.vip</option>
-          <option value="vidsrc.rip">vidsrc.rip</option>
-          <option value="vidfast.pro">vidfast.pro</option>
-          <option value="vidlink.pro">vidlink.pro</option>
-          <option value="videasy.net">videasy.net</option>
-          <option value="vidzee.wtf">vidzee.wtf</option>
-          <option value="vidjoy.pro">vidjoy.pro</option>
-          <option value="vidora.su">vidora.su</option>
-          <option value="vidify.top">vidify.top</option>
-          <option value="vidapi.xyz">vidapi.xyz</option>
-          <option value="embed.su">embed.su</option>
-          <option value="2embed.cc">2embed.cc</option>
-          <option value="play.123embed.net">play.123embed.net</option>
-          <option value="anyembed.xyz">anyembed.xyz</option>
-          <option value="spencerdevs.xyz">spencerdevs.xyz</option>
-          <option value="autoembed.cc">autoembed.cc</option>
-          <option value="autoembed.co">autoembed.co</option>
-          <option value="autoembed.pro">autoembed.pro</option>
-          <option value="godriveplayer.com">godriveplayer.com</option>
-          <option value="111movies.com">111movies.com</option>
-          <option value="moviesapi.to">moviesapi.to</option>
-          <option value="filmku.stream">filmku.stream</option>
-          <option value="flicky.host">flicky.host</option>
-          <option value="nontongo.win">NontonGo.win</option>
-          <option value="rivestream.org">rivestream.org</option>
-          <option value="vidstream.site">vidstream.site</option>
+          <option value="vidsrc.cc">Vidsrc.cc</option>
+          <option value="vidsrc.me">Vidsrc.me</option>
+          <option value="player.videasy.net">Player.Videasy.net</option>
         </select>
       </div>
       <iframe id="modal-video" width="100%" height="315" frameborder="0" allowfullscreen></iframe>
@@ -105,152 +128,5 @@
       </div>
     </div>
   </footer>
-
-  <script>
-    const API_KEY = 'a1e72fd93ed59f56e6332813b9f8dcae';
-    const BASE_URL = 'https://api.themoviedb.org/3';
-    const IMG_URL = 'https://image.tmdb.org/t/p/original';
-    let currentItem;
-
-    async function fetchTrending(type) {
-      const res = await fetch(`${BASE_URL}/trending/${type}/week?api_key=${API_KEY}`);
-      const data = await res.json();
-      return data.results;
-    }
-
-    async function fetchTrendingAnime() {
-      let allResults = [];
-      for (let page = 1; page <= 3; page++) {
-        const res = await fetch(`${BASE_URL}/trending/tv/week?api_key=${API_KEY}&page=${page}`);
-        const data = await res.json();
-        const filtered = data.results.filter(item =>
-          item.original_language === 'ja' && item.genre_ids.includes(16)
-        );
-        allResults = allResults.concat(filtered);
-      }
-      return allResults;
-    }
-
-    function displayBanner(item) {
-      document.getElementById('banner').style.backgroundImage = `url(${IMG_URL}${item.backdrop_path})`;
-      document.getElementById('banner-title').textContent = item.title || item.name;
-    }
-
-    function displayList(items, containerId) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = '';
-      items.forEach(item => {
-        const img = document.createElement('img');
-        img.src = `${IMG_URL}${item.poster_path}`;
-        img.alt = item.title || item.name;
-        img.onclick = () => showDetails(item);
-        container.appendChild(img);
-      });
-    }
-
-    function showDetails(item) {
-      currentItem = item;
-      document.getElementById('modal-title').textContent = item.title || item.name;
-      document.getElementById('modal-description').textContent = item.overview;
-      document.getElementById('modal-image').src = `${IMG_URL}${item.poster_path}`;
-      document.getElementById('modal-rating').innerHTML = '★'.repeat(Math.round(item.vote_average / 2));
-      changeServer();
-      document.getElementById('modal').style.display = 'flex';
-    }
-
-    function changeServer() {
-      const server = document.getElementById('server').value;
-      const type = currentItem.media_type === "movie" ? "movie" : "tv";
-      let embedURL = "";
-
-      switch (server) {
-        case "vidsrc.domains": embedURL = `https://vidsrc.domains/embed/${type}/${currentItem.id}`; break;
-        case "vidsrc.to": embedURL = `https://vidsrc.to/embed/${type}/${currentItem.id}`; break;
-        case "vidsrc.cc": embedURL = `https://vidsrc.cc/v2/embed/${type}/${currentItem.id}`; break;
-        case "vidsrc.vip": embedURL = `https://vidsrc.vip/embed/${type}/${currentItem.id}`; break;
-        case "vidsrc.rip": embedURL = `https://vidsrc.rip/embed/${type}/${currentItem.id}`; break;
-        case "vidfast.pro": embedURL = `https://vidfast.pro/embed/${type}/${currentItem.id}`; break;
-        case "vidlink.pro": embedURL = `https://vidlink.pro/embed/${type}/${currentItem.id}`; break;
-        case "videasy.net": embedURL = `https://player.videasy.net/${type}/${currentItem.id}`; break;
-        case "vidzee.wtf": embedURL = `https://vidzee.wtf/embed/${type}/${currentItem.id}`; break;
-        case "vidjoy.pro": embedURL = `https://vidjoy.pro/embed/${type}/${currentItem.id}`; break;
-        case "vidora.su": embedURL = `https://vidora.su/embed/${type}/${currentItem.id}`; break;
-        case "vidify.top": embedURL = `https://vidify.top/embed/${type}/${currentItem.id}`; break;
-        case "vidapi.xyz": embedURL = `https://vidapi.xyz/embed/${type}/${currentItem.id}`; break;
-        case "embed.su": embedURL = `https://embed.su/embed/${type}/${currentItem.id}`; break;
-        case "2embed.cc": embedURL = `https://2embed.cc/embed/${type}/${currentItem.id}`; break;
-        case "play.123embed.net": embedURL = `https://play.123embed.net/${type}/${currentItem.id}`; break;
-        case "anyembed.xyz": embedURL = `https://anyembed.xyz/embed/${type}/${currentItem.id}`; break;
-        case "spencerdevs.xyz": embedURL = `https://spencerdevs.xyz/embed/${type}/${currentItem.id}`; break;
-        case "autoembed.cc": embedURL = `https://autoembed.cc/embed/${type}/${currentItem.id}`; break;
-        case "autoembed.co": embedURL = `https://autoembed.co/embed/${type}/${currentItem.id}`; break;
-        case "autoembed.pro": embedURL = `https://autoembed.pro/embed/${type}/${currentItem.id}`; break;
-        case "godriveplayer.com": embedURL = `https://godriveplayer.com/embed/${type}/${currentItem.id}`; break;
-        case "111movies.com": embedURL = `https://111movies.com/embed/${type}/${currentItem.id}`; break;
-        case "moviesapi.to": embedURL = `https://moviesapi.to/embed/${type}/${currentItem.id}`; break;
-        case "filmku.stream": embedURL = `https://filmku.stream/embed/${type}/${currentItem.id}`; break;
-        case "flicky.host": embedURL = `https://flicky.host/embed/${type}/${currentItem.id}`; break;
-        case "nontongo.win": embedURL = `https://www.nontongo.win/embed/${type}/${currentItem.id}`; break;
-        case "rivestream.org": embedURL = `https://rivestream.org/embed/${type}/${currentItem.id}`; break;
-        case "vidstream.site": embedURL = `https://vidstream.site/embed/${type}/${currentItem.id}`; break;
-        default: embedURL = "";
-      }
-
-      document.getElementById('modal-video').src = embedURL;
-    }
-
-    function closeModal() {
-      document.getElementById('modal').style.display = 'none';
-      document.getElementById('modal-video').src = '';
-    }
-
-    function openSearchModal() {
-      document.getElementById('search-modal').style.display = 'flex';
-      document.getElementById('search-input').focus();
-    }
-
-    function closeSearchModal() {
-      document.getElementById('search-modal').style.display = 'none';
-      document.getElementById('search-results').innerHTML = '';
-    }
-
-    async function searchTMDB() {
-      const query = document.getElementById('search-input').value;
-      if (!query.trim()) {
-        document.getElementById('search-results').innerHTML = '';
-        return;
-      }
-
-      const res = await fetch(`${BASE_URL}/search/multi?api_key=${API_KEY}&query=${query}`);
-      const data = await res.json();
-
-      const container = document.getElementById('search-results');
-      container.innerHTML = '';
-      data.results.forEach(item => {
-        if (!item.poster_path) return;
-        const img = document.createElement('img');
-        img.src = `${IMG_URL}${item.poster_path}`;
-        img.alt = item.title || item.name;
-        img.onclick = () => {
-          closeSearchModal();
-          showDetails(item);
-        };
-        container.appendChild(img);
-      });
-    }
-
-    async function init() {
-      const movies = await fetchTrending('movie');
-      const tvShows = await fetchTrending('tv');
-      const anime = await fetchTrendingAnime();
-
-      displayBanner(movies[Math.floor(Math.random() * movies.length)]);
-      displayList(movies, 'movies-list');
-      displayList(tvShows, 'tvshows-list');
-      displayList(anime, 'anime-list');
-    }
-
-    init();
-  </script>
 </body>
 </html>
