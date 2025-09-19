@@ -43,7 +43,7 @@
     .dropdown-menu a:hover {
       background: #444;
     }
-    .dropdown:hover .dropdown-menu {
+    .dropdown.open .dropdown-menu {
       display: block;
     }
   </style>
@@ -56,8 +56,10 @@
       <a href="index.html">Home</a>
 
       <!-- Dropdown Menu -->
-      <div class="dropdown">
-        <button class="dropdown-toggle">Browse <i class="fa fa-caret-down"></i></button>
+      <div class="dropdown" id="browseDropdown">
+        <button class="dropdown-toggle" onclick="toggleDropdown('browseDropdown')">
+          Browse <i class="fa fa-caret-down"></i>
+        </button>
         <div class="dropdown-menu">
           <a href="#movies-list">Movies</a>
           <a href="#tvshows-list">TV Shows</a>
@@ -103,7 +105,7 @@
       <div class="server-selector">
         <label for="server">Change Server:</label>
         <select id="server" onchange="changeServer()">
-          <option value="vidsrc.cc">Vidsrc.cc</option>
+          <option value="vidsrc.cc">Vidsrc.cc (Original)</option>
           <option value="vidsrc.me">Vidsrc.me</option>
           <option value="player.videasy.net">Player.Videasy.net</option>
         </select>
@@ -128,5 +130,55 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    // Dropdown toggle (mobile friendly)
+    function toggleDropdown(id) {
+      const dropdown = document.getElementById(id);
+      dropdown.classList.toggle("open");
+    }
+
+    // Modified video player logic: try original first, fallback to next
+    function changeServer(auto = false) {
+      const serverSelect = document.getElementById('server');
+      const server = serverSelect.value;
+      const type = currentItem.media_type === "movie" ? "movie" : "tv";
+      let embedURL = "";
+
+      if (server === "vidsrc.cc") {
+        embedURL = `https://vidsrc.cc/v2/embed/${type}/${currentItem.id}`;
+      } else if (server === "vidsrc.me") {
+        embedURL = `https://vidsrc.net/embed/${type}/?tmdb=${currentItem.id}`;
+      } else if (server === "player.videasy.net") {
+        embedURL = `https://player.videasy.net/${type}/${currentItem.id}`;
+      }
+
+      const iframe = document.getElementById('modal-video');
+      iframe.src = embedURL;
+
+      // fallback if video fails to load (only when auto mode is on)
+      iframe.onerror = () => {
+        if (!auto) return;
+        if (serverSelect.selectedIndex < serverSelect.options.length - 1) {
+          serverSelect.selectedIndex++;
+          changeServer(true);
+        }
+      };
+    }
+
+    // Always start with original server (vidsrc.cc)
+    function showDetails(item) {
+      currentItem = item;
+      document.getElementById('modal-title').textContent = item.title || item.name;
+      document.getElementById('modal-description').textContent = item.overview;
+      document.getElementById('modal-image').src = `${IMG_URL}${item.poster_path}`;
+      document.getElementById('modal-rating').innerHTML = '★'.repeat(Math.round(item.vote_average / 2));
+
+      document.getElementById('server').selectedIndex = 0; // force original
+      changeServer(true); // try original, auto fallback if fails
+
+      document.getElementById('modal').style.display = 'flex';
+    }
+  </script>
 </body>
 </html>
